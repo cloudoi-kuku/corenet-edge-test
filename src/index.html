@@ -49,7 +49,12 @@
     </p>
     <button type="button" id="ping">Call /api/hello</button>
     <button type="button" id="health">Call /api/health</button>
+    <button type="button" id="proxy">Call /api/proxy (needs API_KEY env)</button>
     <pre id="out">Click a button to test edge routes…</pre>
+    <p style="font-size: 0.9rem; margin-top: 1.5rem;">
+      For <code>/api/proxy</code>, set <code>API_KEY</code> in CoreNet <strong>Site Settings → Environment Variables</strong>,
+      then redeploy. Your static app calls <code>fetch('/api/proxy')</code> — the key stays on the server.
+    </p>
     <script>
       async function call(path) {
         const out = document.getElementById('out');
@@ -68,6 +73,7 @@
       }
       document.getElementById('ping').addEventListener('click', () => call('/api/hello'));
       document.getElementById('health').addEventListener('click', () => call('/api/health'));
+      document.getElementById('proxy').addEventListener('click', () => call('/api/proxy'));
     </script>
   </body>
 </html>
