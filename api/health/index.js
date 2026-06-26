@@ -1,0 +1,11 @@
+module.exports = async function (context, req) {
+  context.res = {
+    status: 200,
+    headers: { 'Content-Type': 'application/json' },
+    body: {
+      status: 'ok',
+      route: '/api/health',
+      timestamp: new Date().toISOString(),
+    },
+  };
+};

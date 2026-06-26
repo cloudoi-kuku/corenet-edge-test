@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoreNet Edge Test</title>
+    <style>
+      :root {
+        font-family: system-ui, -apple-system, sans-serif;
+        color: #0f172a;
+        background: #f8fafc;
+      }
+      body {
+        max-width: 40rem;
+        margin: 3rem auto;
+        padding: 0 1.5rem;
+      }
+      h1 { font-size: 1.75rem; margin-bottom: 0.5rem; }
+      p { color: #475569; line-height: 1.5; }
+      button {
+        margin-top: 1rem;
+        padding: 0.6rem 1rem;
+        border: 0;
+        border-radius: 0.5rem;
+        background: #2563eb;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button:hover { background: #1d4ed8; }
+      pre {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #0f172a;
+        color: #e2e8f0;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        font-size: 0.85rem;
+      }
+      .ok { color: #16a34a; font-weight: 600; }
+      .err { color: #dc2626; font-weight: 600; }
+    </style>
+  </head>
+  <body>
+    <h1>CoreNet G10 Edge Test</h1>
+    <p>
+      Static assets from <code>src/</code> plus serverless routes in <code>api/</code>.
+      After deploy, <code>GET /api/hello</code> should return JSON from Azure Static Web Apps.
+    </p>
+    <button type="button" id="ping">Call /api/hello</button>
+    <button type="button" id="health">Call /api/health</button>
+    <pre id="out">Click a button to test edge routes…</pre>
+    <script>
+      async function call(path) {
+        const out = document.getElementById('out');
+        out.textContent = 'Loading ' + path + '…';
+        try {
+          const res = await fetch(path);
+          const text = await res.text();
+          let body = text;
+          try { body = JSON.stringify(JSON.parse(text), null, 2); } catch (_) {}
+          out.textContent = res.status + ' ' + res.statusText + '\n\n' + body;
+          out.className = res.ok ? 'ok' : 'err';
+        } catch (e) {
+          out.textContent = 'Request failed: ' + e.message;
+          out.className = 'err';
+        }
+      }
+      document.getElementById('ping').addEventListener('click', () => call('/api/hello'));
+      document.getElementById('health').addEventListener('click', () => call('/api/health'));
+    </script>
+  </body>
+</html>
